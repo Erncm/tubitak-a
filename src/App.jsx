@@ -120,14 +120,26 @@ export default function App(){
  if(s===undefined)return null
  if(!s)return <Auth/>
  if(!me)return <div className="box"><p>Profil yükleniyor...</p><button onClick={()=>sb.auth.signOut()}>Çıkış</button></div>
- const T=[['bolum','Bölümler'],['gorev','Görevler'],['gunluk','Günlük'],['mesaj','Mesajlar'],['kaynak','Kaynakça']]
- return <><nav>{T.map(([k,n])=><button key={k} className={tab===k?'on':''} onClick={()=>setTab(k)}>{n}</button>)}
-  <button onClick={exp}>Word</button><button onClick={()=>sb.auth.signOut()}>Çıkış ({me.username})</button></nav>
-  <div className="wrap" key={tab}><div className="hero"><Orb size={56}/><div><b>TÜBİTAK A</b><div className="mut">Merhaba, {me.username}</div></div></div>
+ const I={doc:'M7 3h8l4 4v14H7zM14 3v5h5',list:'M4 7l2 2 3-3M4 15l2 2 3-3M13 8h7M13 16h7',book:'M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11',chat:'M4 5h16v11H9l-5 4z',link:'M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1',down:'M12 4v11m-4-4l4 4 4-4M5 20h14',out:'M10 4H5v16h5M15 8l4 4-4 4M19 12H9'}
+ const ic=d=><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={d}/></svg>
+ const T=[['bolum','Bölümler',I.doc],['gorev','Görevler',I.list],['gunluk','Günlük',I.book],['mesaj','Mesajlar',I.chat]]
+ const TITLE={bolum:'Rapor bölümleri',gorev:'Görevler',gunluk:'Günlük',mesaj:'Mesajlar',kaynak:'Kaynakça'}
+ const h=new Date().getHours(),sel=h<5?'İyi geceler':h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar'
+ return <>
+  <div className="wrap" key={tab}>
+   <div className="top"><div><div className="mut">{sel}, {me.username}</div><h1>{TITLE[tab]}</h1></div>
+    <div className="circ">
+     <button className="cb" onClick={()=>setTab('kaynak')} aria-label="Kaynakça">{ic(I.link)}</button>
+     <button className="cb" onClick={exp} aria-label="Word olarak indir">{ic(I.down)}</button>
+     <button className="cb" onClick={()=>sb.auth.signOut()} aria-label="Çıkış">{ic(I.out)}</button>
+    </div></div>
    {tab==='bolum'&&<Sections users={users}/>}
    {tab==='gorev'&&<Tasks me={me} users={users}/>}
    {tab==='gunluk'&&<Feed kind="diary" me={me} ph="Bugün ne yaptınız?"/>}
    {tab==='mesaj'&&<Msgs me={me} users={users}/>}
    {tab==='kaynak'&&<Feed kind="ref" me={me} ph="Kaynağı yazın (yazar, başlık, yıl, bağlantı)"/>}
-  </div><Quick onSend={t=>sb.from("items").insert({kind:"diary",body:t,author:me.username})}/></>
+  </div>
+  <div className="tabs">{[T[0],T[1],null,T[2],T[3]].map((t,i)=>t?<button key={t[0]} className={tab===t[0]?'on':''} onClick={()=>setTab(t[0])}>{ic(t[2])}<span>{t[1]}</span></button>:<i key={i}/>)}</div>
+  <Quick onSend={t=>sb.from("items").insert({kind:"diary",body:t,author:me.username})}/>
+ </>
 }
