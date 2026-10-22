@@ -1,3 +1,4 @@
+import {Orb,Quick} from './Orb.jsx'
 import {useEffect,useState,useCallback} from 'react'
 import {createClient} from '@supabase/supabase-js'
 const sb=createClient(import.meta.env.VITE_SUPABASE_URL,import.meta.env.VITE_SUPABASE_ANON_KEY)
@@ -31,7 +32,7 @@ function Auth(){
    const{error}=await sb.auth.signInWithPassword({email:em,password:p})
    if(error)setE('Kullanıcı adı veya şifre hatalı')
   }}
- return <div className="box"><h2>Rapor Asistanı</h2>
+ return <div className="box"><Orb size={150}/><h2>Rapor Asistanı</h2>
   <input placeholder="Kullanıcı adı (harf, rakam)" value={u} onChange={x=>setU(x.target.value)}/>
   <input type="password" placeholder="Şifre (en az 6 karakter)" value={p} onChange={x=>setP(x.target.value)}/>
   <button onClick={()=>go(false)}>Giriş yap</button><button className="alt" onClick={()=>go(true)}>Hesap oluştur</button>
@@ -122,11 +123,11 @@ export default function App(){
  const T=[['bolum','Bölümler'],['gorev','Görevler'],['gunluk','Günlük'],['mesaj','Mesajlar'],['kaynak','Kaynakça']]
  return <><nav>{T.map(([k,n])=><button key={k} className={tab===k?'on':''} onClick={()=>setTab(k)}>{n}</button>)}
   <button onClick={exp}>Word</button><button onClick={()=>sb.auth.signOut()}>Çıkış ({me.username})</button></nav>
-  <div className="wrap">
+  <div className="wrap" key={tab}>
    {tab==='bolum'&&<Sections users={users}/>}
    {tab==='gorev'&&<Tasks me={me} users={users}/>}
    {tab==='gunluk'&&<Feed kind="diary" me={me} ph="Bugün ne yaptınız?"/>}
    {tab==='mesaj'&&<Msgs me={me} users={users}/>}
    {tab==='kaynak'&&<Feed kind="ref" me={me} ph="Kaynağı yazın (yazar, başlık, yıl, bağlantı)"/>}
-  </div></>
+  </div><Quick onSend={t=>sb.from("items").insert({kind:"diary",body:t,author:me.username})}/></>
 }
