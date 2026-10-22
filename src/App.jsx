@@ -123,7 +123,7 @@ export default function App(){
  const T=[['bolum','Bölümler'],['gorev','Görevler'],['gunluk','Günlük'],['mesaj','Mesajlar'],['kaynak','Kaynakça']]
  return <><nav>{T.map(([k,n])=><button key={k} className={tab===k?'on':''} onClick={()=>setTab(k)}>{n}</button>)}
   <button onClick={exp}>Word</button><button onClick={()=>sb.auth.signOut()}>Çıkış ({me.username})</button></nav>
-  <div className="wrap" key={tab}>
+  <div className="wrap" key={tab}><div className="hero"><Orb size={56}/><div><b>TÜBİTAK A</b><div className="mut">Merhaba, {me.username}</div></div></div>
    {tab==='bolum'&&<Sections users={users}/>}
    {tab==='gorev'&&<Tasks me={me} users={users}/>}
    {tab==='gunluk'&&<Feed kind="diary" me={me} ph="Bugün ne yaptınız?"/>}

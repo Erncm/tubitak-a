@@ -36,7 +36,7 @@ export function Quick({onSend}){
   await onSend(t);setT('');setOk(true);setTimeout(()=>setOk(false),1500)
  }
  return <div className={'quick'+(o?' open':'')}>
-  <button className="qorb" onClick={()=>setO(true)} aria-label="Günlüğe hızlı not"><Orb size={64}/></button>
+  <button className="qorb" onClick={()=>setO(true)} aria-label="Günlüğe hızlı not"><Orb size={80}/></button>
   <div className="qbar">
    <input placeholder="Günlüğe hızlı not..." value={t} onChange={e=>setT(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()}/>
    <button onClick={send}>{ok?'✓':'Ekle'}</button>
